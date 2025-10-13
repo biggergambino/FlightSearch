@@ -3,11 +3,8 @@ package flight;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.Instant;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -31,7 +28,7 @@ public class FlightSearch {
       
       // first condition, 1-9 inclusive passengers only
       valid = validPassengerCount(adultPassengerCount, childPassengerCount, infantPassengerCount);
-    
+     
       // second condition, children cant be in emergency row or first class, assuming first class has a space
       valid = valid && childrenInValidAreas(childPassengerCount, emergencyRowSeating, seatingClass);
      
@@ -43,7 +40,7 @@ public class FlightSearch {
    
       // 5th condition 
       valid = valid && infantHaveAnAdult(adultPassengerCount, infantPassengerCount);
-  
+     
       // 6th and 7th and partial 8th condition
       try {
     	  valid = valid && validDate(departureDate, returnDate);
@@ -52,16 +49,16 @@ public class FlightSearch {
     	  valid = false;
     	  System.err.println("could not parse one or more dates");
       }
-  
+      
       // 9th condition
       valid = valid && validClassSeating(seatingClass);
-   
+     
       // 10th condition
       valid = valid && economyEmergencyOnly(seatingClass, emergencyRowSeating);
-    
+  
       // 11th and partial 8th condition
       valid = valid && airportValidation(departureAirportCode, destinationAirportCode);
-     
+      
       return valid;
    }
    
@@ -105,7 +102,7 @@ public class FlightSearch {
    	private boolean childrenHaveAnAdult(int adultPassengerCount, int childPassengerCount) {
    		boolean valid = false;
    		
-   		if (adultPassengerCount >= (2 * childPassengerCount)) {
+   		if (adultPassengerCount * 2 >= childPassengerCount) {
    			valid = true;
    		}
    		
