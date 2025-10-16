@@ -47,7 +47,6 @@ public class FlightSearch {
       }
       catch (ParseException e) {
     	  valid = false;
-    	  System.err.println("could not parse one or more dates");
       }
       
       // 9th condition
@@ -58,6 +57,18 @@ public class FlightSearch {
   
       // 11th and partial 8th condition
       valid = valid && airportValidation(departureAirportCode, destinationAirportCode);
+      
+      if (valid) {
+    	  this.departureDate = departureDate;
+    	  this.departureAirportCode = departureAirportCode;
+    	  this.emergencyRowSeating = emergencyRowSeating;
+    	  this.returnDate = returnDate;
+    	  this.destinationAirportCode = destinationAirportCode;
+    	  this.seatingClass = seatingClass;
+    	  this.adultPassengerCount = adultPassengerCount;
+    	  this.childPassengerCount = childPassengerCount;
+    	  this.infantPassengerCount = infantPassengerCount;
+      }
       
       return valid;
    }
@@ -79,7 +90,7 @@ public class FlightSearch {
    		boolean valid = true;
    		
    		// criteria doesnt mention whether seating class is formatted as "f c", "f_c" or "fc" so assuming it is "f c"
-	   	if (childPassengerCount > 0 && (emergencyRowSeating || seatingClass.toLowerCase().equals("first class"))) {
+	   	if (childPassengerCount > 0 && (emergencyRowSeating || seatingClass.toLowerCase().equals("first"))) {
 	   	  valid = false;
 	    }
    		
@@ -91,7 +102,7 @@ public class FlightSearch {
    		boolean valid = true;
    		
    		// criteria doesnt mention whether seating class is formatted as "f c", "f_c" or "fc" so assuming it is "f c"
-	   	if (infantPassengerCount > 0 && (emergencyRowSeating || seatingClass.toLowerCase().equals("business class"))) {
+	   	if (infantPassengerCount > 0 && (emergencyRowSeating || seatingClass.toLowerCase().equals("business"))) {
 	   	  valid = false;
 	    }
    		
@@ -186,6 +197,13 @@ public class FlightSearch {
    		boolean validDestination = false;
    		List<String> airportCodes = Arrays.asList("syd", "mel", "lax", "cdg", "del", "pvg", "doh");
    		
+   		if (departureCode == null) {
+   			departureCode = "";
+   		}
+   		if (destinationCode == null) {
+   			destinationCode = "";
+   		}
+   		
    		for (String code : airportCodes) {
    			if (departureCode.toLowerCase().equals(code)) {
    				validDeparture = true;
@@ -201,4 +219,76 @@ public class FlightSearch {
    		
    		return valid;
    	}
+
+	public String getDepartureDate() {
+		return departureDate;
+	}
+
+	public void setDepartureDate(String departureDate) {
+		this.departureDate = departureDate;
+	}
+
+	public String getDepartureAirportCode() {
+		return departureAirportCode;
+	}
+
+	public void setDepartureAirportCode(String departureAirportCode) {
+		this.departureAirportCode = departureAirportCode;
+	}
+
+	public boolean getEmergencyRowSeating() {
+		return emergencyRowSeating;
+	}
+
+	public void setEmergencyRowSeating(boolean emergencyRowSeating) {
+		this.emergencyRowSeating = emergencyRowSeating;
+	}
+
+	public String getReturnDate() {
+		return returnDate;
+	}
+
+	public void setReturnDate(String returnDate) {
+		this.returnDate = returnDate;
+	}
+
+	public String getDestinationAirportCode() {
+		return destinationAirportCode;
+	}
+
+	public void setDestinationAirportCode(String destinationAirportCode) {
+		this.destinationAirportCode = destinationAirportCode;
+	}
+
+	public String getSeatingClass() {
+		return seatingClass;
+	}
+
+	public void setSeatingClass(String seatingClass) {
+		this.seatingClass = seatingClass;
+	}
+
+	public int getAdultPassengerCount() {
+		return adultPassengerCount;
+	}
+
+	public void setAdultPassengerCount(int adultPassengerCount) {
+		this.adultPassengerCount = adultPassengerCount;
+	}
+
+	public int getChildPassengerCount() {
+		return childPassengerCount;
+	}
+
+	public void setChildPassengerCount(int childPassengerCount) {
+		this.childPassengerCount = childPassengerCount;
+	}
+
+	public int getInfantPassengerCount() {
+		return infantPassengerCount;
+	}
+
+	public void setInfantPassengerCount(int infantPassengerCount) {
+		this.infantPassengerCount = infantPassengerCount;
+	}
 }
