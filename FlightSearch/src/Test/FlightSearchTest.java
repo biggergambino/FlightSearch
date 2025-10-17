@@ -3,6 +3,10 @@ package Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -12,11 +16,20 @@ import flight.FlightSearch;
 
 class FlightSearchTest {
 	String dateNow;
+	String yesterdaysDate;
 	
 	@BeforeEach
 	void getDate() {
 		String date = new SimpleDateFormat("dd/MM/yyyy").format(new Date());
 		dateNow = date;
+		
+		
+		String format = "dd/MM/yyyy";
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern(format)
+	            .withZone(ZoneId.systemDefault());
+		Instant now = Instant.now();
+		Instant yesterday = now.minus(1, ChronoUnit.DAYS);
+		yesterdaysDate = formatter.format(yesterday);
 	}
 	
 	// all cases valid
@@ -258,7 +271,7 @@ class FlightSearchTest {
 	@Test
 	void pastDepartureDate() {
 		FlightSearch fs = new FlightSearch();
-		assertFalse(fs.runFlightSearch("15/10/2025", "mel", false, "10/11/2025", "lax", "premium economy", 3, 1, 2));
+		assertFalse(fs.runFlightSearch(yesterdaysDate, "mel", false, "10/11/2025", dateNow, "premium economy", 3, 1, 2));
 		assertEquals(null, fs.getDepartureDate());
 		assertEquals(null, fs.getDepartureAirportCode());
 		assertEquals(false, fs.getEmergencyRowSeating());
@@ -339,7 +352,7 @@ class FlightSearchTest {
 	@Test
 	void returnBeforeDeparture() {
 		FlightSearch fs = new FlightSearch();
-		assertFalse(fs.runFlightSearch("20/01/2026", "mel", false, "19/01/2026", "lax", "premium economy", 3, 1, 2));
+		assertFalse(fs.runFlightSearch(dateNow, "mel", false, yesterdaysDate, "lax", "premium economy", 3, 1, 2));
 		assertEquals(null, fs.getDepartureDate());
 		assertEquals(null, fs.getDepartureAirportCode());
 		assertEquals(false, fs.getEmergencyRowSeating());
@@ -352,6 +365,15 @@ class FlightSearchTest {
 		
 		fs = new FlightSearch();
 		assertFalse(fs.runFlightSearch("25/04/2027", "mel", false, "10/03/2026", "lax", "premium economy", 3, 1, 2));
+		assertEquals(null, fs.getDepartureDate());
+		assertEquals(null, fs.getDepartureAirportCode());
+		assertEquals(false, fs.getEmergencyRowSeating());
+		assertEquals(null, fs.getReturnDate());
+		assertEquals(null, fs.getDestinationAirportCode());
+		assertEquals(null, fs.getSeatingClass());
+		assertEquals(0, fs.getAdultPassengerCount());
+		assertEquals(0, fs.getChildPassengerCount());
+		assertEquals(0, fs.getInfantPassengerCount());
 	}
 	
 	// testing what happens if not two way
