@@ -17,6 +17,7 @@ import flight.FlightSearch;
 class FlightSearchTest {
 	String dateNow;
 	String yesterdaysDate;
+	String tomorrowDate;
 	
 	@BeforeEach
 	void getDate() {
@@ -30,17 +31,20 @@ class FlightSearchTest {
 		Instant now = Instant.now();
 		Instant yesterday = now.minus(1, ChronoUnit.DAYS);
 		yesterdaysDate = formatter.format(yesterday);
+		
+		Instant tomorrow = now.plus(1, ChronoUnit.DAYS);
+		tomorrowDate = formatter.format(tomorrow);
 	}
 	
 	// all cases valid
 	@Test
 	void allValid() {
 		FlightSearch fs = new FlightSearch();
-		assertTrue(fs.runFlightSearch(dateNow, "mel", true, "13/12/2025", "cdg", "economy", 9, 0, 0));
+		assertTrue(fs.runFlightSearch(dateNow, "mel", true, tomorrowDate, "cdg", "economy", 9, 0, 0));
 		assertEquals(dateNow, fs.getDepartureDate());
 		assertEquals("mel", fs.getDepartureAirportCode());
 		assertEquals(true, fs.getEmergencyRowSeating());
-		assertEquals("13/12/2025", fs.getReturnDate());
+		assertEquals(tomorrowDate, fs.getReturnDate());
 		assertEquals("cdg", fs.getDestinationAirportCode());
 		assertEquals("economy", fs.getSeatingClass());
 		assertEquals(9, fs.getAdultPassengerCount());
@@ -271,7 +275,7 @@ class FlightSearchTest {
 	@Test
 	void pastDepartureDate() {
 		FlightSearch fs = new FlightSearch();
-		assertFalse(fs.runFlightSearch(yesterdaysDate, "mel", false, "10/11/2025", dateNow, "premium economy", 3, 1, 2));
+		assertFalse(fs.runFlightSearch(yesterdaysDate, "mel", false, dateNow, "cdg", "premium economy", 3, 1, 2));
 		assertEquals(null, fs.getDepartureDate());
 		assertEquals(null, fs.getDepartureAirportCode());
 		assertEquals(false, fs.getEmergencyRowSeating());
