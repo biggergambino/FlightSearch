@@ -2,17 +2,29 @@ package Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import flight.FlightSearch;
 
 class FlightSearchTest {
+	String dateNow;
+	
+	@BeforeEach
+	void getDate() {
+		String date = new SimpleDateFormat("dd/MM/yyyy").format(new Date());
+		dateNow = date;
+	}
+	
 	// all cases valid
 	@Test
 	void allValid() {
 		FlightSearch fs = new FlightSearch();
-		assertTrue(fs.runFlightSearch("12/12/2025", "mel", true, "13/12/2025", "cdg", "economy", 9, 0, 0));
-		assertEquals("12/12/2025", fs.getDepartureDate());
+		assertTrue(fs.runFlightSearch(dateNow, "mel", true, "13/12/2025", "cdg", "economy", 9, 0, 0));
+		assertEquals(dateNow, fs.getDepartureDate());
 		assertEquals("mel", fs.getDepartureAirportCode());
 		assertEquals(true, fs.getEmergencyRowSeating());
 		assertEquals("13/12/2025", fs.getReturnDate());
