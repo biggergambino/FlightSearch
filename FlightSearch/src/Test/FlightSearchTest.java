@@ -2,12 +2,10 @@ package Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.util.Date;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,14 +19,15 @@ class FlightSearchTest {
 	
 	@BeforeEach
 	void getDate() {
-		String date = new SimpleDateFormat("dd/MM/yyyy").format(new Date());
-		dateNow = date;
-		
-		
+		// format to day/month/year
 		String format = "dd/MM/yyyy";
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern(format)
 	            .withZone(ZoneId.systemDefault());
 		Instant now = Instant.now();
+		
+		// turn dates into strings
+		dateNow = formatter.format(now);
+		
 		Instant yesterday = now.minus(1, ChronoUnit.DAYS);
 		yesterdaysDate = formatter.format(yesterday);
 		
